@@ -19,6 +19,10 @@ async function asyncForEach(array, callback) {
   }
 }
 
+router.get("/",(req,res)=>{
+  res.status(200).send("App working fine");
+})
+
 router.post("/add/quiz", authenticateadmin, (req, res) => {
   const quiz = new Quiz({
     questions: req.body.questions,
