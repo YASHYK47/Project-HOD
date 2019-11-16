@@ -7,8 +7,8 @@ var fs = require("fs");
 var path = require("path");
 
 var { mongoose } = require("./../db/mongoose.js");
-var { Userstud } = require("../models/user.js");
-var { Userstaf } = require("../models/admin.js");
+var { User } = require("../models/user.js");
+var { Admin } = require("../models/admin.js");
 var { authenticateuser } = require("../middleware/authenticateuser.js");
 var { authenticateadmin } = require("../middleware/authenticateadmin.js");
 var { Quiz } = require("./../models/quiz.js");
@@ -100,7 +100,7 @@ router.post("/submit/quiz/:quizId", authenticateuser, (req, res) => {
 
 router.post("/register/user", (req, res) => {
   var body = _.pick(req.body, ["name", "email", "age", "parentName","password"]);
-  var user = new Userstud(body);
+  var user = new User(body);
 
   user
     .save()
@@ -117,7 +117,7 @@ router.post("/register/user", (req, res) => {
 
 router.post("/register/admin", (req, res) => {
   var body = _.pick(req.body, ["name", "email", "specialist","password"]);
-  var user = new Userstaf(body);
+  var user = new Admin(body);
   user
     .save()
     .then(() => {
@@ -131,16 +131,16 @@ router.post("/register/admin", (req, res) => {
     });
 });
 
-router.get("/userstud/profile", authenticateuser, (req, res) => {
+router.get("/user/profile", authenticateuser, (req, res) => {
   var token = req.header("x-auth");
   Userstud.findByToken(token).then(user => {
     res.send(req.user);
   });
 });
 
-router.get("/userstaf/profile", authenticateadmin, (req, res) => {
+router.get("/admin/profile", authenticateadmin, (req, res) => {
   var token = req.header("x-auth");
-  Userstaf.findByToken(token).then(user => {
+  Admin.findByToken(token).then(user => {
     res.send(req.user);
   });
 });
